@@ -31,6 +31,10 @@
     "types": ["vite/client"]
   },
   "include": [
-    "src"
+    "src/react-app",
+    "src/shared"
+  ],
+  "exclude": [
+    "src/worker"
   ]
 }
