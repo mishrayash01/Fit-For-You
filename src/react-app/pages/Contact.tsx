@@ -1,198 +1,123 @@
 import { useState } from "react";
-import { MapPin, Phone, Clock, MessageCircle } from "lucide-react";
-import { Button } from "@/react-app/components/ui/button";
-import { Input } from "@/react-app/components/ui/input";
-import { Textarea } from "@/react-app/components/ui/textarea";
+import { motion } from "framer-motion";
+import { MapPin, Phone, Clock, Target, Loader2 } from "lucide-react";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    message: ""
-  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const whatsappMessage = `Hi! I'm ${formData.name}. ${formData.message}. My phone: ${formData.phone}, Email: ${formData.email}`;
-    const whatsappUrl = `https://wa.me/918354855567?text=${encodeURIComponent(whatsappMessage)}`;
-    window.open(whatsappUrl, '_blank');
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen pt-24 px-4 pb-20">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Contact Us</h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Ready to start your fitness journey? Get in touch with us today.
-          </p>
-        </div>
+    <div className="w-full flex flex-col items-center pt-32 px-6 max-w-7xl mx-auto">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-24"
+      >
+        <h1 className="text-5xl md:text-7xl font-display uppercase text-[#F9FAFB] mb-6">Get in Touch</h1>
+        <p className="text-xl text-[#CCFF00] tracking-widest uppercase">Ready to start your fitness journey?</p>
+      </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* Contact Form */}
-          <div className="glass-card p-8">
-            <h2 className="text-3xl font-bold text-white mb-6">Send Us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-gray-300 mb-2">Your Name *</label>
-                <Input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="glass-button text-white border-white/30"
-                  placeholder="Enter your name"
-                />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full mb-32">
+        {/* Contact Form */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="liquid-glass-card p-10"
+        >
+          {submitted ? (
+            <div className="h-full flex flex-col items-center justify-center text-center py-20">
+              <div className="w-20 h-20 bg-[#CCFF00]/20 rounded-full flex items-center justify-center mb-6">
+                <Target className="w-10 h-10 text-[#CCFF00]" />
               </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2">Phone Number *</label>
-                <Input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="glass-button text-white border-white/30"
-                  placeholder="Enter your phone number"
-                />
+              <h3 className="text-3xl font-display uppercase mb-4 text-[#F9FAFB]">Message Sent!</h3>
+              <p className="text-[#9CA3AF]">We'll be in touch with you shortly to kickstart your journey.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold uppercase tracking-widest text-[#9CA3AF]">Name</label>
+                <input required type="text" className="bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-[#CCFF00] transition-colors" />
               </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2">Email</label>
-                <Input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="glass-button text-white border-white/30"
-                  placeholder="Enter your email (optional)"
-                />
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold uppercase tracking-widest text-[#9CA3AF]">Phone</label>
+                <input required type="tel" className="bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-[#CCFF00] transition-colors" />
               </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2">Message / Fitness Goals *</label>
-                <Textarea
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="glass-button text-white border-white/30 min-h-32"
-                  placeholder="Tell us about your fitness goals..."
-                />
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold uppercase tracking-widest text-[#9CA3AF]">Email</label>
+                <input required type="email" className="bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-[#CCFF00] transition-colors" />
               </div>
-
-              <Button 
-                type="submit"
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white py-6 text-lg"
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-bold uppercase tracking-widest text-[#9CA3AF]">Message / Fitness Goals</label>
+                <textarea required rows={4} className="bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-[#CCFF00] transition-colors resize-none"></textarea>
+              </div>
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="bg-[#CCFF00] text-black font-bold uppercase tracking-widest py-4 rounded-full mt-4 hover:scale-[1.02] transition-transform flex justify-center items-center h-[56px]"
               >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Send via WhatsApp
-              </Button>
+                {loading ? <Loader2 className="animate-spin w-6 h-6 text-black" /> : "Send Message"}
+              </button>
             </form>
+          )}
+        </motion.div>
+
+        {/* Contact Info */}
+        <motion.div 
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col gap-8"
+        >
+          <div className="liquid-glass-card p-8 flex items-start gap-6">
+            <div className="bg-white/5 p-4 rounded-full">
+              <MapPin className="w-8 h-8 text-[#CCFF00]" />
+            </div>
+            <div>
+              <h4 className="text-xl font-display uppercase mb-2">Location</h4>
+              <p className="text-[#9CA3AF] leading-relaxed">C-1/342, Sector G, Jankipuram,<br/>Lucknow, UP 226021</p>
+              <p className="text-sm text-white/50 mt-4 uppercase tracking-widest">Areas Served: Jankipuram, Sector G, Gomti Nagar Ext, Aliganj, Shaheed Path.</p>
+            </div>
           </div>
 
-          {/* Contact Information */}
-          <div className="space-y-6">
-            {/* Map */}
-            <div className="glass-card p-2 h-80">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.0906778982043!2d80.89828831504216!3d26.841982283150534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfd991f32b16b%3A0x93cc840ba5b2af8d!2sFIT%20FOR%20YOU(Gym%20and%20Fitness%20Center)!5e0!3m2!1sen!2sin!4v1234567890"
-                width="100%"
-                height="100%"
-                style={{ border: 0, borderRadius: '12px' }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+          <div className="liquid-glass-card p-8 flex items-start gap-6">
+            <div className="bg-white/5 p-4 rounded-full">
+              <Phone className="w-8 h-8 text-[#CCFF00]" />
             </div>
-
-            {/* Contact Details */}
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-bold text-white mb-6">Get in Touch</h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Address</h3>
-                    <p className="text-gray-200 leading-relaxed">
-                      C-1/342, Sector G, Jankipuram<br />
-                      Lucknow, Uttar Pradesh 226021
-                    </p>
-                    <a 
-                      href="https://maps.google.com/?q=FIT+FOR+YOU+Gym+Jankipuram+Lucknow"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-400 hover:text-cyan-300 text-sm mt-2 inline-block"
-                    >
-                      Get Directions →
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-purple-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Phone</h3>
-                    <a href="tel:08354855567" className="text-gray-200 hover:text-cyan-400 transition-colors block">
-                      +91 83548 55567
-                    </a>
-                    <a href="https://wa.me/918354855567" className="text-green-400 hover:text-green-300 text-sm mt-1 inline-block">
-                      Chat on WhatsApp →
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Operating Hours</h3>
-                    <p className="text-gray-200">
-                      Monday - Saturday<br />
-                      5:00 PM - 10:00 PM
-                    </p>
-                    <p className="text-gray-400 text-sm mt-1">Closed Sundays</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-4">
-              <a href="tel:08354855567">
-                <Button className="w-full glass-button bg-gradient-to-r from-cyan-500/20 to-purple-500/20 hover:from-cyan-500/40 hover:to-purple-500/40 text-white border border-white/30 py-6">
-                  <Phone className="w-5 h-5 mr-2" />
-                  Call Now
-                </Button>
-              </a>
-              <a href="https://wa.me/918354855567">
-                <Button className="w-full glass-button bg-gradient-to-r from-green-500/20 to-green-600/20 hover:from-green-500/40 hover:to-green-600/40 text-white border border-white/30 py-6">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  WhatsApp
-                </Button>
+            <div className="w-full">
+              <h4 className="text-xl font-display uppercase mb-2">Phone</h4>
+              <a href="tel:+918354855567" className="text-2xl font-display text-white hover:text-[#CCFF00] transition-colors tracking-widest block mb-4">+91 83548 55567</a>
+              <a href="https://wa.me/918354855567" target="_blank" rel="noreferrer">
+                <button className="w-full border border-[#CCFF00]/50 text-[#CCFF00] py-3 rounded-full font-bold uppercase tracking-widest hover:bg-[#CCFF00]/10 transition-colors">
+                  WhatsApp Us
+                </button>
               </a>
             </div>
           </div>
-        </div>
 
-        {/* Areas Served */}
-        <div className="glass-card p-10 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Areas We Serve</h2>
-          <p className="text-gray-200 mb-6">
-            Proudly serving the fitness community in Jankipuram and surrounding areas of Lucknow
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['Jankipuram', 'Sector G', 'Lucknow', 'Gomti Nagar Extension', 'Aliganj', 'Shaheed Path'].map((area) => (
-              <span key={area} className="glass-card px-4 py-2 text-gray-200">
-                {area}
-              </span>
-            ))}
+          <div className="liquid-glass-card p-8 flex items-start gap-6">
+            <div className="bg-white/5 p-4 rounded-full">
+              <Clock className="w-8 h-8 text-[#CCFF00]" />
+            </div>
+            <div>
+              <h4 className="text-xl font-display uppercase mb-2">Hours</h4>
+              <p className="text-[#9CA3AF]">Mon - Sat: 5:00 PM - 10:00 PM</p>
+              <p className="text-[#CCFF00] mt-1 uppercase tracking-widest text-sm font-bold">Closed Sundays</p>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
